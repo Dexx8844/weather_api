@@ -16,26 +16,27 @@ exports.getWeather = async (req, res) => {
 
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
         const response = await axios.get(url);
+        const data = response.data
         const { name, main, weather, wind, timezone } = response.data;
         // const utcTime = new Date(); 
         // const cityTime = new Date(utcTime.getTime() + timezone * 1000);
         const utcTime = new Date();
-        const cityTime = new Date(utcTime.toUTCString());
-        cityTime.setSeconds(cityTime.getSeconds() + timezone);
-        
+        // const cityTime = new Date(utcTime.toUTCString()); 
+        // cityTime.setSeconds(cityTime.getSeconds() + timezone); 
+
         const weatherData = {
-            city: name,
+            city: `${data.name}, ${data.sys.country}`,
             temperature: main.temp,
             condition: weather[0].description,
             wind_speed: wind.speed,
-            city_time: cityTime.toLocaleString(),
-            searchedAt: formatedDate
+            // city_time: cityTime.toLocaleString(),
+             humidity: data.main.humidity
         };
 
         const weatherEntry = new WeatherModel(weatherData);
         await weatherEntry.save();
 
-        console.log('Weather Data:', weatherData);
+       // console.log('Weather Data:', weatherData);
 
         res.status(200).json({
             message: 'Weather data fetched successfully',
