@@ -16,7 +16,7 @@ exports.getWeather = async (req, res) => {
 
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
         const response = await axios.get(url);
-        const data = response.data
+        //const data = response.data
         const { name, main, weather, wind, timezone } = response.data;
         // const utcTime = new Date(); 
         // const cityTime = new Date(utcTime.getTime() + timezone * 1000);
